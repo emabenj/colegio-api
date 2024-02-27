@@ -78,13 +78,17 @@ public class UsuarioServIMPL implements UsuarioServ, UserDetailsService{
 	// LISTAR USUARIOS (Docentes)
 	@Override @Transactional(readOnly = true)
 	public Collection<Usuario> listar() {
-		return repository.findAll().stream().filter(u -> !u.getEstado().equals(EstadoType.DELETED.name()) 
-				&& u.getItemsRole().stream().noneMatch(itemsRole ->itemsRole.getRoleId() == 2)).toList();
+		return repository.findAll().stream()
+		        .filter(u -> !u.getEstado().equals(EstadoType.DELETED.name()) 
+		                && u.getItemsRole().stream().noneMatch(itemsRole -> itemsRole.getRoleId() == 2))
+		        .collect(Collectors.toList());
 	}
 	// LISTAR USUARIOS (Docentes) + Eliminados
 	@Override @Transactional(readOnly = true)
 	public Collection<Usuario> listarEliminados() {
-		return repository.findAll().stream().filter(u -> u.getItemsRole().stream().noneMatch(itemsRole ->itemsRole.getRoleId() == 2)).toList();
+		return repository.findAll().stream()
+		        .filter(u -> u.getItemsRole().stream().noneMatch(itemsRole -> itemsRole.getRoleId() == 2))
+		        .collect(Collectors.toList());
 	}
 	// DESACTIVAR ESTADOS
 	@Override
