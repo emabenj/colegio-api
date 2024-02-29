@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import pe.colegio.util.RoleType;
@@ -23,6 +24,7 @@ public class Rol_Usuario implements Serializable {
 	@Column(unique = true, nullable = false)
 	private String nombre = RoleType.APOD.name();
 	
+	@JsonIgnore
 	@ManyToMany(mappedBy = "itemsRole", fetch = FetchType.EAGER)
 	private Set<Usuario> itemsUser=new HashSet<>();
 

@@ -17,7 +17,7 @@ public class NoticiaController {
 	public NoticiaController() {}
 
 	// LISTAR
-	@PreAuthorize("hasRole('ADMIN') or hasRole('DOC')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('DOC') or hasRole('APOD')")
 	@GetMapping
 	public ResponseEntity<Collection<Noticia>> listarNoticias(){
 		Collection<Noticia> noticias = new ArrayList<>();
