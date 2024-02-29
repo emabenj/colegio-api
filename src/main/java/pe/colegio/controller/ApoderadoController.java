@@ -65,7 +65,7 @@ public class ApoderadoController {
 		} catch (DataIntegrityViolationException e) {
 		    return new ResponseEntity<>("Error al agregar el apoderado: El correo o el teléfono ya se encuentra registrado.", HttpStatus.BAD_REQUEST);
 		} catch (Exception e) {
-		    return new ResponseEntity<>("Error al agregar el apoderado: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		    return new ResponseEntity<>("Error al agregar el apoderado: " + e.getCause().toString(), HttpStatus.BAD_REQUEST);
 		}
 	}
 	// ACTUALIZAR APODERADO
