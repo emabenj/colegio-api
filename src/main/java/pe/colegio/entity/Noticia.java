@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity @Table(name = "noticias")
@@ -32,6 +33,7 @@ public class Noticia implements Serializable{
 	@Column @DateTimeFormat(pattern="yyyy-MM-dd",iso=ISO.DATE)
 	private LocalDate fechaPublicacion;
 
+	@JsonIgnore
 	@ManyToOne @JoinColumn(name = "administrador_id", nullable = false)
     private Administrador administrador;
 
