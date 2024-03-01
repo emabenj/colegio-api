@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity @Table(name = "apoderados")
@@ -32,6 +33,7 @@ public class Apoderado implements Serializable{
 	@Column(nullable = false)
 	private String direccion;
 
+	@JsonIgnore
 	@OneToOne @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
