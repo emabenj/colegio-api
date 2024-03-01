@@ -41,7 +41,7 @@ public class ApoderadoServIMPL implements ApoderadoServ{
 	}	
 	//AGREGAR APODERADO
 	@Override @Transactional
-	public void agregar(Apoderado apoderado) {
+	public Apoderado agregar(Apoderado apoderado) {
 		Usuario newUsuario = new Usuario();
 		newUsuario.setApoderado(apoderado);
 		newUsuario.setContrasena(new BCryptPasswordEncoder().encode(newUsuario.getContrasena()));
@@ -50,7 +50,7 @@ public class ApoderadoServIMPL implements ApoderadoServ{
 		newUsuario.setItemsRole(Collections.singleton(roles));
 		
 		apoderado.setUsuario(usuarioRepository.save(newUsuario));
-		repository.save(apoderado);
+		return repository.save(apoderado);
 	}
 	//ACTUALIZAR APODERADO
 	@Override @Transactional
