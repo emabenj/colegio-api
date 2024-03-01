@@ -61,7 +61,7 @@ public class ApoderadoController {
 			if ( msg == "" && !estudiantesNoRegistrados.isEmpty()) { msg = "Uno o más estudiantes no se encuentran registrados."; }
 			if (msg != "") { return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST); }
 			apoderado = service.agregar(apoderado);
-			return new ResponseEntity<Apoderado>(apoderado, HttpStatus.CREATED);
+			return new ResponseEntity<>(apoderado.getApoderadoId(), HttpStatus.CREATED);
 		} catch (DataIntegrityViolationException e) {
 		    return new ResponseEntity<>("Error al agregar el apoderado: El correo o el teléfono ya se encuentra registrado.", HttpStatus.BAD_REQUEST);
 		} catch (Exception e) {
