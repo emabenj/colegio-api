@@ -2,15 +2,20 @@ package pe.colegio.service;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import pe.colegio.entity.Apoderado;
+import pe.colegio.entity.Estudiante;
 import pe.colegio.entity.Rol_Usuario;
 import pe.colegio.entity.Usuario;
 import pe.colegio.repository.ApoderadoRep;
+import pe.colegio.repository.EstudianteRep;
 import pe.colegio.repository.Rol_UsuarioRep;
 import pe.colegio.repository.UsuarioRep;
 
@@ -22,6 +27,8 @@ public class ApoderadoServIMPL implements ApoderadoServ{
 	private UsuarioRep usuarioRepository;
 	@Autowired
 	private Rol_UsuarioRep rolesRepository;
+	@Autowired
+	private EstudianteRep estudianteRepository;
 	
 	//LISTAR APODERADOS
 	@Override @Transactional(readOnly = true)
@@ -49,6 +56,12 @@ public class ApoderadoServIMPL implements ApoderadoServ{
 		Rol_Usuario roles = rolesRepository.findById(3).orElse(null); // ROL APODERADO
 		newUsuario.setItemsRole(Collections.singleton(roles));
 		
+		Set<Estudiante> estudiantesUPDATE = new HashSet();
+		for (Estudiante est : apoderado.getItemsEstudiante()) {
+		    Estudiante estudiante = estudianteRepository.findById(est.getEstudianteId()).orElse(null);
+		    estudiantesUPDATE.add(estudiante);		    		    
+		}
+		apoderado.setItemsEstudiante(estudiantesUPDATE);
 		apoderado.setUsuario(usuarioRepository.save(newUsuario));
 		return repository.save(apoderado);
 	}
