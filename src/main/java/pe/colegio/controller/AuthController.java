@@ -90,11 +90,19 @@ public class AuthController {
 	@PreAuthorize("hasRole('ADMIN') or hasRole('DOC') or hasRole('APOD')")
 	@PutMapping("contrasena")
 	public ResponseEntity<?> actualizarContrasena(@RequestBody Usuario usuario) {
-		if(service.buscarPorCorreo(usuario.getEmail()) != null) {
-			service.actualizar(usuario);
-			return ResponseEntity.ok("Contraseña actualizada.");
-		}
-		return ResponseEntity.notFound().build();
+		HttpHeaders headers = new HttpHeaders();
+		String msg = "Contraseña actualizada.";
+		String correo = usuario.getEmail().trim(), contra = usuario.getContrasena().trim();
+		if (!correo.trim().isEmpty() && !contra.isEmpty()){
+			if(service.buscarPorCorreo(usuario.getEmail()) != null) {
+				if (!contra.isEmpty()) {
+					service.actualizar(usuario);
+					return ResponseEntity.ok().headers(headers).build();
+				} msg = "Completar el campo de la contraseña.";
+			}
+		} else { msg = "Completar los campos de correo electrónico y contraseña adecuadamente"; }
+		headers.set("message", msg);
+		return ResponseEntity.badRequest().headers(headers).build();
 	}
 	// RESET ESTADOS
 	@PutMapping("/desactivar")

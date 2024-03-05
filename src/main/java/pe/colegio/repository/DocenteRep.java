@@ -17,6 +17,7 @@ public interface DocenteRep extends JpaRepository<Docente, Integer> {
 	
 	public Collection<Docente> findByCurso_CursoId(Integer cursoId);
 	public Collection<Docente> findByCurso_ItemsEstudiante_EstudianteId(Integer estudianteId);
+	
 	//Filtrar todos los cursos
 //	@Query(value = "SELECT * FROM docentes d INNER JOIN cursos c ON c.curso_id = d.curso_id "
 //			+ "WHERE ((:nombres IS Null) OR (d.nombres LIKE CONCAT('%',:nombres,'%'))) "

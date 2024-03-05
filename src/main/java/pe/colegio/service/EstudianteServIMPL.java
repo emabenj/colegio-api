@@ -1,5 +1,6 @@
 package pe.colegio.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,8 +17,15 @@ public class EstudianteServIMPL implements EstudianteServ{
 
 	//LISTAR ESTUDIANTES
 	@Override @Transactional(readOnly=true)
-	public Collection<Estudiante> listar(Integer cursoId){
-		Collection<Estudiante> estudiantes = cursoId != null ? repository.findByItemsCurso_CursoId(cursoId) : repository.findAll();
+	public Collection<Estudiante> listar(Integer cursoId, Integer grado, String seccion){
+		Collection<Estudiante> estudiantes = new ArrayList();
+		if (cursoId != null && grado != null && seccion != null) {
+			estudiantes = repository.findByItemsCurso_CursoIdAndGradoAndSeccion(cursoId, grado, seccion.toCharArray()[0] );
+		}
+		else if (cursoId != null && grado != null) { estudiantes = repository.findByItemsCurso_CursoIdAndGrado(cursoId, grado); }
+		else {
+			estudiantes = cursoId != null ? repository.findByItemsCurso_CursoId(cursoId) : repository.findByItemsApoderadoSizeLessThan(3);
+		}
 		return estudiantes;
 	}
 	//BUSCAR ESTUDIANTE

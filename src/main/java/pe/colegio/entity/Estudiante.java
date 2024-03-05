@@ -29,7 +29,7 @@ public class Estudiante implements Serializable{
 	@Column
 	private String apellidos;
 	@Column @DateTimeFormat(pattern="yyyy-MM-dd",iso=ISO.DATE)
-	private LocalDate fechaNacimiento;
+	private LocalDate fechaNacimiento = LocalDate.now().minusYears(10);
 	@Column
 	private Character genero;
 	@Column(unique = true, nullable = false)
@@ -43,7 +43,7 @@ public class Estudiante implements Serializable{
 	private Character nivelEducativo;
 
 	@Column @DateTimeFormat(pattern="yyyy-MM-dd",iso=ISO.DATE)
-	private LocalDate fechaInscripcion;
+	private LocalDate fechaInscripcion = LocalDate.now();
 
 	@Column
 	private String estado = EstadoType.ACTIVE.name();

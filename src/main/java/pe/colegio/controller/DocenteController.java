@@ -2,9 +2,6 @@ package pe.colegio.controller;
 
 import java.time.LocalDate;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.*;
@@ -40,37 +37,49 @@ public class DocenteController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Docente> obtenerDocente(@PathVariable("id") Integer docenteId) {
 		Docente docente = service.buscarPorId(docenteId);
-		if(docente != null) { return ResponseEntity.ok(docente); }
-		return ResponseEntity.notFound().build();
+		return docente != null ? ResponseEntity.ok(docente) : ResponseEntity.badRequest().build();
 	}
 	// AGREGAR DOCENTE
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping
 	public ResponseEntity<?> agregarDocente(@RequestBody Docente docente) {
+		HttpHeaders headers = new HttpHeaders();
+		String msg = "";
 		try {
 			if (!cursoRep.existsByCursoId(docente.getCurso().getCursoId())) {
-				return new ResponseEntity<>("El curso asignado al docente no se encuentra registrado.", HttpStatus.BAD_REQUEST);
+				msg = "El curso asignado al docente no se encuentra registrado.";
 			}
 			else if(!(docente.getTelefono()>899999999 && docente.getTelefono()<1000000000)) {
-				return new ResponseEntity<>("El formato del número de teléfono no es correcto.", HttpStatus.BAD_REQUEST);
+				msg = "El formato del número de teléfono no es correcto.";
 			}
-			docente.setFechaRegistro(LocalDate.now());
-			service.agregar(docente);
-			return new ResponseEntity<Docente>(docente, HttpStatus.CREATED);
+			if (msg.isEmpty()) {
+				docente.setFechaRegistro(LocalDate.now());
+				service.agregar(docente);
+				return new ResponseEntity<Docente>(docente, HttpStatus.CREATED);
+			}
 		} catch (DataIntegrityViolationException e) {
-            return new ResponseEntity<>("Error al agregar el docente: El correo o el teléfono ya se encuentra registrado.", HttpStatus.BAD_REQUEST);
+            msg = "Error al agregar el docente: El correo o el teléfono ya se encuentra registrado.";
 		} catch (NullPointerException e) {
-			return new ResponseEntity<>("Error al agregar el docente: Se ingresó un valor nulo para el correo, teléfono o el curso.", HttpStatus.BAD_REQUEST);
+			msg = "Error al agregar el docente: Se ingresó un valor nulo para el correo, teléfono o el curso.";
 		}
+		headers.set("message", msg);
+		return ResponseEntity.badRequest().headers(headers).build();
 	}
 	// ACTUALIZAR DOCENTE
 	@PreAuthorize("hasRole('DOC')")
 	@PutMapping
 	public ResponseEntity<?> actualizarDocente(@RequestBody Docente docente) {
-		if(usuarioRep.existsByEmail(docente.getCorreo()) && service.buscarPorCorreo(docente.getCorreo()) != null) {
-			service.actualizar(docente);
-			return ResponseEntity.ok("Docente actualizado.");
-		}
-		return ResponseEntity.notFound().build();
+		HttpHeaders headers = new HttpHeaders();
+		String msg = "Docente actualizado.";
+		try {
+			if(usuarioRep.existsByEmail(docente.getCorreo()) && service.buscarPorCorreo(docente.getCorreo()) != null) {
+				service.actualizar(docente);
+				headers.set("message", msg);
+				return ResponseEntity.ok().headers(headers).build();
+			} msg = "No se encontró al docente.";
+		} catch (DataIntegrityViolationException e) { msg = "Error al actualizar: Se ingresó un valor duplicado."; } 
+		catch (Exception e) { msg = "Error al actualizar el docente: " + e.getMessage(); }
+		headers.set("message", msg);
+		return ResponseEntity.badRequest().headers(headers).build();
 	}
 }

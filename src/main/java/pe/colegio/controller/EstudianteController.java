@@ -17,17 +17,21 @@ public class EstudianteController {
 	private CursoServ cursoService;
 	
 	// LISTAR
+	@PreAuthorize("hasRole('ADMIN') or hasRole('APOD') or hasRole('DOC')")
 	@GetMapping
 	public ResponseEntity<Collection<Estudiante>> listarEstudiantes(
-			@RequestParam(required = false, value = "curso") Integer cursoId){
+			@RequestParam(required = false, value = "curso") Integer cursoId,
+			@RequestParam(required = false, value = "grado") Integer grado,
+			@RequestParam(required = false, value = "seccion") String seccion){
 		Collection<Estudiante> estudiantes = new ArrayList<>();
+		HttpHeaders headers = new HttpHeaders();
 		if (cursoId != null && cursoService.buscarPorId(cursoId) == null) {
-			HttpHeaders headers = new HttpHeaders();
 			headers.set("message", "Curso no encontrado.");
-			return ResponseEntity.notFound().headers(headers).build();
+			return ResponseEntity.badRequest().headers(headers).build();
 		}
-		estudiantes = service.listar(cursoId);
-		return ResponseEntity.ok(estudiantes);
+		estudiantes = service.listar(cursoId, grado, seccion);
+		headers.set("message", String.valueOf(estudiantes.size()));
+		return ResponseEntity.ok().headers(headers).body(estudiantes);
 	}
 	// BUSCAR POR ID
 	@GetMapping("/{id}")
@@ -48,20 +52,20 @@ public class EstudianteController {
 	@PreAuthorize("hasRole('APOD') or hasRole('ADMIN')")	
 	@PutMapping
 	public ResponseEntity<?> actualizarEstudiante(@RequestBody Estudiante estudiante) {
+		HttpHeaders headers = new HttpHeaders();
+		String msg = "Estudiante actualizado.";
 		try {
-			if(!(estudiante.getDni()>60000000 && estudiante.getDni()<79999999)) {
-				return new ResponseEntity<>("El formato del dni no es correcto.", HttpStatus.BAD_REQUEST);
-			}
-			if(service.buscarPorId(estudiante.getEstudianteId(), null) != null) {
+			if(!(estudiante.getDni()>60000000 && estudiante.getDni()<79999999)) { msg = "El formato del dni no es correcto."; }
+			if(service.buscarPorId(estudiante.getEstudianteId(), null) == null) { msg = "El estudiante no está registrado."; }
+			else {
 				service.actualizar(estudiante);
-				return ResponseEntity.ok("Estudiante actualizado.");
+				headers.set("message", msg);
+				return ResponseEntity.ok().headers(headers).build();
 			}
-		} catch (DataIntegrityViolationException e) {
-		    return new ResponseEntity<>("Error al actualizar: El número de DNI ya se encuentra registrado.", HttpStatus.BAD_REQUEST);
-		} catch (Exception e) {
-		    return new ResponseEntity<>("Error al actualizar: " + e.getMessage(), HttpStatus.BAD_REQUEST);
-		}
-		return ResponseEntity.notFound().build();
+		} catch (DataIntegrityViolationException e) { msg = "Error al actualizar: El número de DNI ya se encuentra registrado."; } 
+		catch (Exception e) { msg = "Error al actualizar: " + e.getMessage(); }
+		headers.set("message", msg);
+		return ResponseEntity.badRequest().headers(headers).build();
 	}
 	// ELIMINAR ESTUDIANTE
 //	@PreAuthorize("hasRole('ADMIN')")

@@ -13,7 +13,6 @@ import javax.persistence.Table;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity @Table(name = "noticias")
@@ -31,17 +30,18 @@ public class Noticia implements Serializable{
 	@Column
 	private String contenido;
 	@Column @DateTimeFormat(pattern="yyyy-MM-dd",iso=ISO.DATE)
-	private LocalDate fechaPublicacion;
+	private LocalDate fechaPublicacion = LocalDate.now();
+	@Column
+	private String ubiImagen;
 
-	@JsonIgnore
 	@ManyToOne @JoinColumn(name = "administrador_id", nullable = false)
     private Administrador administrador;
 
-	public Noticia(String titulo, String contenido, LocalDate fechaPublicacion) {
+	public Noticia(String titulo, String contenido, String ubiImagen) {
 		super();
 		this.titulo = titulo;
 		this.contenido = contenido;
-		this.fechaPublicacion = fechaPublicacion;
+		this.ubiImagen = ubiImagen;
 	}
 
 	public Integer getNoticiaId() {
@@ -74,6 +74,14 @@ public class Noticia implements Serializable{
 
 	public void setFechaPublicacion(LocalDate fechaPublicacion) {
 		this.fechaPublicacion = fechaPublicacion;
+	}
+
+	public String getUbiImagen() {
+		return ubiImagen;
+	}
+
+	public void setUbiImagen(String ubiImagen) {
+		this.ubiImagen = ubiImagen;
 	}
 
 	public Administrador getAdministrador() {

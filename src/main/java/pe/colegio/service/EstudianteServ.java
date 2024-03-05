@@ -6,7 +6,7 @@ import pe.colegio.entity.Estudiante;
 
 public interface EstudianteServ {
 	public abstract Estudiante buscarPorId(Integer id, Integer dni);
-	public abstract Collection<Estudiante> listar(Integer cursoId);
+	public abstract Collection<Estudiante> listar(Integer cursoId, Integer grado, String seccion);
 	
 //	public abstract void agregar(Estudiante estudiante);
 	public abstract void actualizar(Estudiante estudiante);

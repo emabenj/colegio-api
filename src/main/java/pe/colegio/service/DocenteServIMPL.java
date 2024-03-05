@@ -43,7 +43,7 @@ public class DocenteServIMPL implements DocenteServ{
 	}	
 //	//AGREGAR DOCENTE
 	@Override @Transactional
-	public void agregar(Docente docente) {
+	public Docente agregar(Docente docente) {
 		Usuario newUsuario = new Usuario();
 		newUsuario.setDocente(docente);
 		newUsuario.setContrasena(new BCryptPasswordEncoder().encode(newUsuario.getContrasena()));
@@ -52,7 +52,7 @@ public class DocenteServIMPL implements DocenteServ{
 		newUsuario.setItemsRole(Collections.singleton(roles));
 		
 		docente.setUsuario(usuarioRepository.save(newUsuario));
-		repository.save(docente);
+		return repository.save(docente);
 	}
 //	//ACTUALIZAR DOCENTE
 	@Override @Transactional
