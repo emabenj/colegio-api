@@ -19,8 +19,9 @@ public class CursoController {
 	@PreAuthorize("hasRole('ADMIN') or hasRole('DOC') or hasRole('APOD')")
 	@GetMapping
 	public ResponseEntity<Collection<Curso>> listarCursos(
-			@RequestParam(required = false, value = "estudiante") Integer estudianteId){
-		Collection<Curso> cursos = service.listar(estudianteId);
+			@RequestParam(required = false, value = "estudiante") Integer estudianteId,
+			@RequestParam(required = false, value = "nivel") String nivelEducativo){
+		Collection<Curso> cursos = service.listar(estudianteId, nivelEducativo);
 		return ResponseEntity.ok(cursos);
 	}
 	// BUSCAR POR ID

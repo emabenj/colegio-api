@@ -19,8 +19,10 @@ public class CursoServIMPL implements CursoServ {
 	}
 	// LISTAR CURSOS
 	@Override @Transactional(readOnly = true)
-	public Collection<Curso> listar(Integer estudianteId) {
-		Collection<Curso> cursos = estudianteId != null ? repository.findByItemsEstudiante_EstudianteId(estudianteId) : repository.findAll();
+	public Collection<Curso> listar(Integer estudianteId, String nivelEducativo) {
+		Collection<Curso> cursos = estudianteId != null ? 
+				repository.findByItemsEstudiante_EstudianteId(estudianteId) : nivelEducativo == null ?
+						repository.findAll() : repository.findByItemsEstudiante_NivelEducativo(nivelEducativo.toCharArray()[0]);
 		return cursos;
 	}
 
