@@ -7,5 +7,5 @@ import pe.colegio.entity.Curso;
 public interface CursoRep extends JpaRepository<Curso, Integer> {
 	public Boolean existsByCursoId(Integer cursoId);
 	public Collection<Curso> findByItemsEstudiante_EstudianteId(Integer estudianteId);
-	public Collection<Curso> findByItemsEstudiante_NivelEducativo(Character nivel);
+	public Collection<Curso> findByNivelEducativo(Character nivel);
 }

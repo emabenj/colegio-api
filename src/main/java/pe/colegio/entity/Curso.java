@@ -30,7 +30,8 @@ public class Curso implements Serializable{
 	@JsonIgnore
 	@ManyToMany(mappedBy = "itemsCurso")
 	private Set<Tarea> itemsTareas = new HashSet<>();
-	
+
+	@JsonIgnore
 	@OneToMany(mappedBy = "curso")
 	private Collection<Docente> docentes = new ArrayList<>();
 

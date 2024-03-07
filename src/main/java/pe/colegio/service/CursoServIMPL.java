@@ -22,7 +22,7 @@ public class CursoServIMPL implements CursoServ {
 	public Collection<Curso> listar(Integer estudianteId, String nivelEducativo) {
 		Collection<Curso> cursos = estudianteId != null ? 
 				repository.findByItemsEstudiante_EstudianteId(estudianteId) : nivelEducativo == null ?
-						repository.findAll() : repository.findByItemsEstudiante_NivelEducativo(nivelEducativo.toCharArray()[0]);
+						repository.findAll() : repository.findByNivelEducativo(nivelEducativo.toCharArray()[0]);
 		return cursos;
 	}
 
