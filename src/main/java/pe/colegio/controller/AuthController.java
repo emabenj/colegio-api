@@ -88,7 +88,7 @@ public class AuthController {
 		return ResponseEntity.badRequest().headers(headers).build();
 	}
 	// COMPROBAR CORREO
-	@GetMapping
+	@GetMapping("/email")
 	public ResponseEntity<?> comprobarEmail(@RequestParam(required = false, value = "correo")String correo){
 		HttpHeaders headers = new HttpHeaders();
 		Boolean result = repository.existsByEmail(correo);
@@ -96,7 +96,7 @@ public class AuthController {
 		return result ? ResponseEntity.ok().headers(headers).build() : ResponseEntity.badRequest().headers(headers).build();
 	}
 	// OBTENER SESION
-	@GetMapping
+	@GetMapping("session")
 	public ResponseEntity<?> obtenerSesion(HttpServletRequest request, @RequestParam("rol") String rol) {
 		String bearerToken = request.getHeader("Authorization");
 		if(bearerToken != null) {
