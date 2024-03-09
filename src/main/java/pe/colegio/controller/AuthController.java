@@ -71,7 +71,7 @@ public class AuthController {
 	}
 	// ACTUALIZAR CONTRASEÑA
 	@PreAuthorize("hasRole('ADMIN') or hasRole('DOC') or hasRole('APOD')")
-	@PutMapping("contrasena")
+	@PutMapping("/contrasena")
 	public ResponseEntity<?> actualizarContrasena(@RequestBody Usuario usuario) {
 		HttpHeaders headers = new HttpHeaders();
 		String msg = "Contraseña actualizada.";
