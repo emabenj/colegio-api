@@ -54,24 +54,7 @@ public class AuthController {
 		if(repository.findByEmail(email).orElse(null).tieneRol(rol)) {
 			return ResponseEntity.ok(new JwtAuthResponse(token));
 		}
-		return ResponseEntity.notFound().build();
-		
-	}
-	
-	// AGREGAR USUARIO
-	@PostMapping("/register")
-	public ResponseEntity<?> agregarUsuario(@RequestBody Usuario usuario) {
-		if(repository.existsByEmail(usuario.getEmail())) {
-			return new ResponseEntity<>("El correo ya se encuentra registrado.", HttpStatus.BAD_REQUEST);
-		}
-
-		usuario.setContrasena(passwordEncoder.encode(usuario.getContrasena()));
-		
-		Rol_Usuario roles = rolRepository.findById(2).get();
-		usuario.setItemsRole(Collections.singleton(roles));
-		
-		repository.save(usuario);
-		return new ResponseEntity<>("Usuario registrado exitosamente", HttpStatus.OK);
+		return ResponseEntity.notFound().build();		
 	}
 	// BUSCAR POR ID, USUARIO
 	@GetMapping("/buscar")
@@ -104,13 +87,13 @@ public class AuthController {
 		headers.set("message", msg);
 		return ResponseEntity.badRequest().headers(headers).build();
 	}
-	// RESET ESTADOS
-	@PutMapping("/desactivar")
-	public ResponseEntity<?> actualizarEstados(){
-		service.cambiarEstadoUsuarios(EstadoType.INACTIVE.name());
-		String c = String.valueOf(repository.findAll().size());
-		
-		return new ResponseEntity<>("Usuarios desactivados exitosamente: "+c, HttpStatus.OK);
+	// COMPROBAR CORREO
+	@GetMapping("/email")
+	public ResponseEntity<?> comprobarEmail(@RequestBody Usuario usuario){
+		HttpHeaders headers = new HttpHeaders();
+		Boolean result = repository.existsByEmail(usuario.getEmail());
+		headers.set("message", result.toString());
+		return result ? ResponseEntity.ok().headers(headers).build() : ResponseEntity.badRequest().headers(headers).build();
 	}
 	// OBTENER SESION
 	@GetMapping("/sesion")
@@ -123,5 +106,13 @@ public class AuthController {
 			if(usuario != null && usuario.tieneRol(rol)) { return ResponseEntity.ok(usuario); }
 		}
 		return ResponseEntity.notFound().build();
+	}
+	// RESET ESTADOS
+	@PutMapping("/desactivar")
+	public ResponseEntity<?> actualizarEstados(){
+		service.cambiarEstadoUsuarios(EstadoType.INACTIVE.name());
+		String c = String.valueOf(repository.findAll().size());
+		
+		return new ResponseEntity<>("Usuarios desactivados exitosamente: "+c, HttpStatus.OK);
 	}
 }
