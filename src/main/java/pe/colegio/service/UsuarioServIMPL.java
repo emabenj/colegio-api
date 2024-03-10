@@ -12,10 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import pe.colegio.entity.Docente;
 import pe.colegio.entity.Usuario;
-import pe.colegio.repository.DocenteRep;
 import pe.colegio.repository.UsuarioRep;
 import pe.colegio.util.EstadoType;
 
@@ -23,8 +20,6 @@ import pe.colegio.util.EstadoType;
 public class UsuarioServIMPL implements UsuarioServ, UserDetailsService{
 	@Autowired
 	private UsuarioRep repository;
-	@Autowired
-	private DocenteRep docenteRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

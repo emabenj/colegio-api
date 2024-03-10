@@ -39,6 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		    .and()
 		    .authorizeRequests()
 		    .antMatchers(HttpMethod.POST, "/auth/**").permitAll()
+		    .antMatchers(HttpMethod.PUT, "/auth/contrasena").permitAll()
 		    .antMatchers(HttpMethod.GET, "/**").permitAll()
 		    .antMatchers("/roles/**").permitAll()
 		    .anyRequest()

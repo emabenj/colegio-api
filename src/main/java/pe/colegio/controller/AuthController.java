@@ -1,13 +1,12 @@
 package pe.colegio.controller;
 
-import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import pe.colegio.entity.*;
@@ -26,9 +25,6 @@ public class AuthController {
 	private UsuarioRep repository;
 	
 	@Autowired
-	private Rol_UsuarioRep rolRepository;
-	
-	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
@@ -43,8 +39,17 @@ public class AuthController {
 	@PostMapping("/login")
 	public ResponseEntity<JwtAuthResponse> iniciarSesion(@RequestBody Usuario usuario,
 			@RequestParam("rol") String rol) {
+		String passChange="cambiarContra123";
 		String email = usuario.getEmail();
 		String pass = usuario.getContrasena();
+		
+		Usuario prueba = repository.findByEmail(email).orElse(null);
+		
+		BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder();
+		if(prueba != null && bCrypt.matches(passChange, prueba.getContrasena())) {
+			prueba.setContrasena(bCrypt.encode(pass));
+			repository.save(prueba);
+		}
 		
 		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, pass));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -70,21 +75,21 @@ public class AuthController {
 		return ResponseEntity.notFound().build();
 	}
 	// ACTUALIZAR CONTRASEÑA
-	@PreAuthorize("hasRole('ADMIN') or hasRole('DOC') or hasRole('APOD')")
 	@PutMapping("/contrasena")
 	public ResponseEntity<?> actualizarContrasena(@RequestBody Usuario usuario) {
 		HttpHeaders headers = new HttpHeaders();
 		String msg = "Contraseña actualizada.";
 		String correo = usuario.getEmail().trim(), contra = usuario.getContrasena().trim();
-		if (!correo.trim().isEmpty() && !contra.isEmpty()){
+		if (!correo.isEmpty() && !contra.isEmpty()){
 			if(service.buscarPorCorreo(usuario.getEmail()) != null) {
-				if (!contra.isEmpty()) {
-					service.actualizar(usuario);
-					return ResponseEntity.ok().headers(headers).build();
-				} msg = "Completar el campo de la contraseña.";
+				service.actualizar(usuario);
+				headers.set("message", msg);
+				System.out.println(msg);
+				return ResponseEntity.ok().headers(headers).build();
 			}
 		} else { msg = "Completar los campos de correo electrónico y contraseña adecuadamente"; }
 		headers.set("message", msg);
+		System.out.println(msg);
 		return ResponseEntity.badRequest().headers(headers).build();
 	}
 	// COMPROBAR CORREO

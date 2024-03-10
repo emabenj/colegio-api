@@ -4,12 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.persistence.*;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity @Table(name = "administradores")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "administradorId")
 public class Administrador implements Serializable{
 	private static final long serialVersionUID = 1L;
 
@@ -28,6 +25,7 @@ public class Administrador implements Serializable{
 	@Column(unique = true, nullable = false)
 	private Integer telefono;
 
+	@JsonIgnore
 	@OneToOne @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
