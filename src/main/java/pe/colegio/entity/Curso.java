@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity @Table(name = "cursos")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "cursoId")
 public class Curso implements Serializable{
 	private static final long serialVersionUID = 1L;
 	

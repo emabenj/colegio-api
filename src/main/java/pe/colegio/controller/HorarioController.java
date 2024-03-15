@@ -1,6 +1,6 @@
 package pe.colegio.controller;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -17,11 +17,12 @@ public class HorarioController {
 	public HorarioController() {}
 
 	// LISTAR
-	@PreAuthorize("hasRole('ADMIN') or hasRole('DOC')")
-	@GetMapping
-	public ResponseEntity<Collection<Horario>> listarHorarios(){
-		Collection<Horario> horarios = new ArrayList<>();
-		horarios = service.listar();
+	@PreAuthorize("hasRole('ADMIN') or hasRole('APOD')")
+	@PostMapping
+	public ResponseEntity<Collection<Horario>> listarHorarios(
+			@RequestParam(value = "fecha") String fecha,
+			@RequestBody Collection<Integer> cursoIds){
+		Collection<Horario> horarios = service.listar(LocalDate.parse(fecha), cursoIds);
 		return ResponseEntity.ok(horarios);
 	}
 	// BUSCAR POR ID
@@ -33,13 +34,12 @@ public class HorarioController {
 		return ResponseEntity.notFound().build();
 	}
 	// AGREGAR HORARIO
-	@PreAuthorize("hasRole('ADMIN') or hasRole('DOC')")
-	@PostMapping
-	public ResponseEntity<Horario> agregarHorario(@RequestBody Horario horario) {
-		horario.setHorarioId(0);
-		service.agregar(horario);
-		return new ResponseEntity<Horario>(horario, HttpStatus.CREATED);
-	}
+//	@PreAuthorize("hasRole('ADMIN') or hasRole('DOC')")
+//	@PostMapping
+//	public ResponseEntity<Horario> agregarHorario(@RequestBody Horario horario) {
+//		service.agregar(horario);
+//		return new ResponseEntity<Horario>(horario, HttpStatus.CREATED);
+//	}
 	// ACTUALIZAR HORARIO
 	@PreAuthorize("hasRole('ADMIN') or hasRole('DOC')")
 	@PutMapping

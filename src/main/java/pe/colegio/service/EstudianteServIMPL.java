@@ -17,10 +17,15 @@ public class EstudianteServIMPL implements EstudianteServ{
 
 	//LISTAR ESTUDIANTES
 	@Override @Transactional(readOnly=true)
-	public Collection<Estudiante> listar(Integer cursoId, Integer grado, String seccion){
+	public Collection<Estudiante> listar(Integer cursoId, String nivel, Integer grado, String seccion){
+		Character niv = nivel.toCharArray()[0];
+		Character sec = seccion.toCharArray()[0];
 		Collection<Estudiante> estudiantes = new ArrayList();
 		if (cursoId != null && grado != null && seccion != null) {
-			estudiantes = repository.findByItemsCurso_CursoIdAndGradoAndSeccion(cursoId, grado, seccion.toCharArray()[0] );
+			estudiantes = repository.findByItemsCurso_CursoIdAndGradoAndSeccion(cursoId, grado, sec);
+		}
+		else if(nivel != null && grado != null && seccion != null) {
+			estudiantes = repository.findByNivelEducativoAndGradoAndSeccion(niv, grado, sec);
 		}
 		else if (cursoId != null && grado != null) { estudiantes = repository.findByItemsCurso_CursoIdAndGrado(cursoId, grado); }
 		else {

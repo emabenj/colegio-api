@@ -58,9 +58,9 @@ public class DocenteController {
 				return new ResponseEntity<Docente>(docente, HttpStatus.CREATED);
 			}
 		} catch (DataIntegrityViolationException e) {
-            msg = "Error al agregar el docente: El correo o el teléfono ya se encuentra registrado.";
+            msg = "El correo o el teléfono ya se encuentra registrado.";
 		} catch (NullPointerException e) {
-			msg = "Error al agregar el docente: Se ingresó un valor nulo para el correo, teléfono o el curso.";
+			msg = "Se ingresó un valor nulo para el correo, teléfono o el curso.";
 		}
 		headers.set("message", msg);
 		return ResponseEntity.badRequest().headers(headers).build();

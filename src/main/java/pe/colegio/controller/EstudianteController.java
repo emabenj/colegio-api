@@ -21,6 +21,7 @@ public class EstudianteController {
 	@GetMapping
 	public ResponseEntity<Collection<Estudiante>> listarEstudiantes(
 			@RequestParam(required = false, value = "curso") Integer cursoId,
+			@RequestParam(required = false, value = "nivel") String nivel,
 			@RequestParam(required = false, value = "grado") Integer grado,
 			@RequestParam(required = false, value = "seccion") String seccion){
 		Collection<Estudiante> estudiantes = new ArrayList<>();
@@ -29,7 +30,7 @@ public class EstudianteController {
 			headers.set("message", "Curso no encontrado.");
 			return ResponseEntity.badRequest().headers(headers).build();
 		}
-		estudiantes = service.listar(cursoId, grado, seccion);
+		estudiantes = service.listar(cursoId, nivel, grado, seccion);
 		headers.set("message", String.valueOf(estudiantes.size()));
 		return ResponseEntity.ok().headers(headers).body(estudiantes);
 	}

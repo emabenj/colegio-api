@@ -2,6 +2,7 @@ package pe.colegio.entity;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,21 +27,22 @@ public class Horario implements Serializable{
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer horarioId;
 
-	@Column
-	private String dia;
+	@Column @DateTimeFormat(pattern="yyyy-MM-dd",iso=ISO.DATE)
+	private LocalDate fechaClase;
 	@Column @DateTimeFormat(pattern="HH:mm",iso=ISO.TIME)
-	private LocalDate horaInicio;
+	private LocalTime horaInicio;
 	@Column @DateTimeFormat(pattern="HH:mm",iso=ISO.TIME)
-	private LocalDate horaFin;
+	private LocalTime horaFin;
 
 	@ManyToOne @JoinColumn(name = "curso_id", nullable = false)
     private Curso curso;
 
-	public Horario(String dia, LocalDate horaInicio, LocalDate horaFin) {
+	public Horario(LocalDate fechaClase, LocalTime horaInicio, LocalTime horaFin, Curso curso) {
 		super();
-		this.dia = dia;
+		this.fechaClase = fechaClase;
 		this.horaInicio = horaInicio;
 		this.horaFin = horaFin;
+		this.curso = curso;
 	}
 
 	public Integer getHorarioId() {
@@ -51,27 +53,27 @@ public class Horario implements Serializable{
 		this.horarioId = horarioId;
 	}
 
-	public String getDia() {
-		return dia;
+	public LocalDate getFechaClase() {
+		return fechaClase;
 	}
 
-	public void setDia(String dia) {
-		this.dia = dia;
+	public void setFechaClase(LocalDate fechaClase) {
+		this.fechaClase = fechaClase;
 	}
 
-	public LocalDate getHoraInicio() {
+	public LocalTime getHoraInicio() {
 		return horaInicio;
 	}
 
-	public void setHoraInicio(LocalDate horaInicio) {
+	public void setHoraInicio(LocalTime horaInicio) {
 		this.horaInicio = horaInicio;
 	}
 
-	public LocalDate getHoraFin() {
+	public LocalTime getHoraFin() {
 		return horaFin;
 	}
 
-	public void setHoraFin(LocalDate horaFin) {
+	public void setHoraFin(LocalTime horaFin) {
 		this.horaFin = horaFin;
 	}
 
