@@ -55,7 +55,8 @@ public class Estudiante implements Serializable{
 	@ManyToMany @JoinTable(name = "estudiantes_cursos", joinColumns = @JoinColumn(name="estudiante_id"),
 			   inverseJoinColumns = @JoinColumn(name="curso_id"))
 	private Set<Curso> itemsCurso = new HashSet<>();
-	
+
+	@JsonIgnore
 	@OneToMany(mappedBy = "estudiante")
 	private Collection<Calificacion> calificaciones = new ArrayList<>();	
 

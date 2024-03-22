@@ -1,9 +1,13 @@
 package pe.colegio.service;
 
 import java.util.Collection;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import pe.colegio.entity.Curso;
 import pe.colegio.entity.Tarea;
 import pe.colegio.repository.TareaRep;
 
@@ -20,21 +24,21 @@ public class TareaServIMPL implements TareaServ {
 	// LISTAR TAREAS
 	@Override @Transactional(readOnly = true)
 	public Collection<Tarea> listar() {
-		Collection<Tarea> noticias = repository.findAll();
-		return noticias;
+		Collection<Tarea> tareas = repository.findAll();
+		return tareas;
 	}
 
 	// AGREGAR TAREA
 	@Override @Transactional
-	public void agregar(Tarea noticia) {
-		noticia.setTareaId(null);
-		repository.save(noticia);
+	public void agregar(Tarea tarea) {
+//		Set<Curso> cursos = tarea.getItemsCurso();
+		repository.save(tarea);
 	}
 
 	// ACTUALIZAR TAREA
 	@Override @Transactional
-	public void actualizar(Tarea noticia) {
-		repository.save(noticia);
+	public void actualizar(Tarea tarea) {
+		repository.save(tarea);
 	}
 
 	// ELIMINAR TAREA

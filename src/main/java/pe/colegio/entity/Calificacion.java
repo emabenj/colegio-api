@@ -17,13 +17,13 @@ public class Calificacion implements Serializable{
 	private Integer calificacionId;
 
 	@Column
-	private Integer calificacion1;
+	private Integer calificacion1 = 0;
 	@Column
-	private Integer calificacion2;
+	private Integer calificacion2 = 0;
 	@Column
-	private Integer calificacion3;
+	private Integer calificacion3 = 0;
 	@Column
-	private Integer calificacion4;
+	private Integer calificacion4 = 0;
 	@Column
 	private Double calificacionFinal = 0.;
 	
