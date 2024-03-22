@@ -3,17 +3,24 @@ package pe.colegio.controller;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,16 +28,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import pe.colegio.entity.Asistencia;
 import pe.colegio.entity.Docente;
 import pe.colegio.entity.Estudiante;
+import pe.colegio.entity.Asistencia;
 import pe.colegio.entity.Usuario;
 import pe.colegio.service.AsistenciaServ;
 import pe.colegio.service.DocenteServ;
 import pe.colegio.service.EstudianteServ;
 import pe.colegio.service.UsuarioServ;
 
-//@Controller @RequestMapping("/asistencias")
+@Controller @RequestMapping("/asistencias")
 public class AsistenciaController {
-//	@Autowired
-//	private AsistenciaServ service;
+	@Autowired
+	private AsistenciaServ service;
 //	@Autowired
 //	private UsuarioServ usuarioService;
 //	@Autowired
@@ -43,18 +51,32 @@ public class AsistenciaController {
 	private LocalDate FInicio = LocalDate.parse("2024-04-03");
 	private Set<Estudiante> tempItemsAl = new HashSet<Estudiante>();
 	
-	//LISTAR
-	@GetMapping("")
-	public String listarEstudiantes_GET() { 
-		return "redirect:/asistencias/";
+
+	// LISTAR ASISTENCIAS
+	@PreAuthorize("hasRole('ADMIN') or hasRole('APOD') or hasRole('DOC')")
+	@PostMapping
+	public ResponseEntity<Collection<Asistencia>> listarAsistencias(
+			@RequestParam(value = "fecha") String fecha,
+			@RequestBody Collection<Estudiante> estudiantes){
+		Collection<Asistencia> asistencias = service.listar(LocalDate.parse(fecha), estudiantes);
+		return ResponseEntity.ok(asistencias);
 	}
-	
-//	@GetMapping("/")
-//	public String listarEstudiantes_GET(Map map) {		
-//		map.put("estudiantesL", estudianteService.listarPorCurso(null));
-//		return "Asistencia/Listar";
-//		return "redirect:/home/";
-//	}
+	// ACTUALIZAR ASISTENCIAS
+	@PreAuthorize("hasRole('ADMIN') or hasRole('APOD') or hasRole('DOC')")
+	@PutMapping
+	public ResponseEntity<Collection<Asistencia>> actualizarAsistencias(@RequestBody Collection<Asistencia> asistencias){
+		HttpHeaders headers = new HttpHeaders();
+		String msg = "No se ha actualizado ninguna noticia.";
+		Collection<Asistencia> asistenciasActualizadas = service.actualizarAsistencias(asistencias);
+		if(asistenciasActualizadas.size() == 0) {
+			return ResponseEntity.badRequest().headers(headers).build();
+		}else if(asistenciasActualizadas.size() != asistencias.size()) {
+			Integer total = asistencias.size() - asistenciasActualizadas.size();
+			msg = "Hubieron " + total.toString() + " asistencias de alumnos que no se actualizaron.";			
+		}else { msg = "Asistencias actualizadas."; }
+		headers.set("message", msg);
+		return ResponseEntity.ok().headers(headers).body(asistenciasActualizadas);
+	}
 	//AGREGAR - EDITAR
 //	@GetMapping("/estudiante/{id}/{sem}")
 //	public String controlAsistenciasEstudiante_GET(Model model, Map map, @PathVariable("id")Integer estudianteId, @PathVariable("sem")Integer sem) {

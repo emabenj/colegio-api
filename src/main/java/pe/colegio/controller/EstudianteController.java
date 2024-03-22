@@ -42,13 +42,6 @@ public class EstudianteController {
 		Estudiante estudiante = service.buscarPorId(id, dni);
 		return estudiante != null ?  ResponseEntity.ok(estudiante) : ResponseEntity.notFound().build();
 	}
-	// AGREGAR ESTUDIANTE
-//	@PreAuthorize("hasRole('ADMIN')")
-//	@PostMapping
-//	public ResponseEntity<Estudiante> agregarEstudiante(@RequestBody Estudiante estudiante) {
-//		service.agregar(estudiante);
-//		return new ResponseEntity<Estudiante>(estudiante, HttpStatus.CREATED);
-//	}
 	// ACTUALIZAR ESTUDIANTE
 	@PreAuthorize("hasRole('APOD') or hasRole('ADMIN')")	
 	@PutMapping
@@ -68,19 +61,4 @@ public class EstudianteController {
 		headers.set("message", msg);
 		return ResponseEntity.badRequest().headers(headers).build();
 	}
-	// ELIMINAR ESTUDIANTE
-//	@PreAuthorize("hasRole('ADMIN')")
-//	@DeleteMapping("/{id}")
-//	public ResponseEntity<?> eliminarEstudiante(@PathVariable("id") Integer id) {
-//		Estudiante estudiante = service.buscarPorId(id); 
-//		if(estudiante != null) {
-//			if(!estudiante.getEstado().equals(EstadoType.DELETED.name())) {
-//				service.eliminar(id);
-//				return ResponseEntity.ok("Estudiante eliminado.");				
-//			}else {
-//				return ResponseEntity.ok("El estudiante ya se encuentra eliminado.");
-//			}
-//		}	
-//		return ResponseEntity.notFound().build();
-//	}
 }

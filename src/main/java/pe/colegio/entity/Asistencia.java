@@ -7,8 +7,12 @@ import java.util.Set;
 import javax.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import pe.colegio.util.EstadoType;
 
 @Entity
 @Table(name = "asistencias")
@@ -22,7 +26,7 @@ public class Asistencia implements Serializable{
 	private Integer asistenciaId;
 
 	@Column
-	private Character estado;
+	private String estado = EstadoType.F.name();
 	
 	@DateTimeFormat(pattern="yyyy-MM-dd",iso=ISO.DATE)
 	private LocalDate fecha;
@@ -32,15 +36,13 @@ public class Asistencia implements Serializable{
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "asistencias_estudiantes", joinColumns = @JoinColumn(name="asistencia_id"),
-			inverseJoinColumns = @JoinColumn(name="estudiante_id"))	
+			inverseJoinColumns = @JoinColumn(name="estudiante_id"))
 	private Set<Estudiante> itemsEstudiante = new HashSet<>();
 	
 
-	public Asistencia( LocalDate fecha, Character estado, String justificacion) {
+	public Asistencia(LocalDate fecha) {
 		super();
 		this.fecha = fecha;
-		this.estado = estado;
-		this.justificacion = justificacion;
 	}
 
 
@@ -60,11 +62,11 @@ public class Asistencia implements Serializable{
 		this.fecha = fecha;
 	}
 
-	public Character getEstado() {
+	public String getEstado() {
 		return estado;
 	}
 
-	public void setEstado(Character estado) {
+	public void setEstado(String estado) {
 		this.estado = estado;
 	}
 

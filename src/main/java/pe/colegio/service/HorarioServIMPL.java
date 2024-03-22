@@ -4,11 +4,19 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import pe.colegio.entity.Curso;
+import pe.colegio.entity.Docente;
 import pe.colegio.entity.Horario;
 import pe.colegio.repository.CursoRep;
 import pe.colegio.repository.HorarioRep;
@@ -49,7 +57,15 @@ public class HorarioServIMPL implements HorarioServ {
 			}
 			horarios.addAll(horariosCurso);
 		}
+
 		return horarios;
+	}
+	public static int countOccurrences(List<Integer> listaNumeros, int numero) {
+	    Map<Integer, Integer> mapaRepeticiones = new HashMap<>();
+	    for (int num : listaNumeros) {
+	        mapaRepeticiones.put(num, mapaRepeticiones.getOrDefault(num, 0) + 1);
+	    }
+	    return mapaRepeticiones.getOrDefault(numero, 0);
 	}
 	// BUSCAR POR ID
 	@Override @Transactional(readOnly = true)
@@ -65,7 +81,9 @@ public class HorarioServIMPL implements HorarioServ {
 	// ACTUALIZAR HORARIO
 	@Override @Transactional
 	public void actualizar(Horario horario) {
-		horario.setCurso(null);
+		Horario updateHorario = buscarPorId(horario.getHorarioId());
+		updateHorario.setHoraInicio(horario.getHoraInicio());
+		updateHorario.setHoraFin(horario.getHoraFin());
 		repository.save(horario);
 	}
 	// ELIMINAR HORARIO

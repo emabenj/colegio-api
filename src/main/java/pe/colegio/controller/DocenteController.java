@@ -2,6 +2,8 @@ package pe.colegio.controller;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.*;
@@ -9,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.colegio.entity.*;
 import pe.colegio.repository.CursoRep;
+import pe.colegio.repository.EstudianteRep;
 import pe.colegio.repository.UsuarioRep;
 import pe.colegio.service.*;
 
@@ -20,17 +23,37 @@ public class DocenteController {
 	private UsuarioRep usuarioRep;
 	@Autowired
 	private CursoRep cursoRep;
+	@Autowired
+	private EstudianteRep estudianteRep;
 	
 	public DocenteController() {}
 
 	// LISTAR
-	@PreAuthorize("hasRole('ADMIN') or hasRole('DOC')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('DOC') or hasRole('APOD')")
 	@GetMapping
 	public ResponseEntity<Collection<Docente>> listarDocentes(
 			@RequestParam(name="curso", required = false) Integer cursoId, 
-			@RequestParam(name="estudiante", required = false) Integer estudianteId){        
-		Collection<Docente> docentes = service.listar(cursoId, estudianteId);
-		return ResponseEntity.ok(docentes);
+			@RequestParam(name="estudiante", required = false) Integer estudianteId){
+		HttpHeaders headers = new HttpHeaders();
+		Collection<Docente> docentes = new ArrayList<>();
+		String msg = "Docentes encontrados";
+		if (cursoId != null && cursoRep.findById(cursoId) == null) {
+			msg = "Curso no encontrado";
+		}else if(estudianteId != null && estudianteRep.findById(estudianteId) == null) {
+			msg = "Estudiante no encontrado";
+		}else {
+			docentes = service.listar(cursoId, estudianteId);
+			if (docentes.size()==0) {
+				msg = "No hay docentes.";
+			}
+			headers.set("message", msg);
+			List<Docente> sortedDocentes = docentes.stream()
+			        .sorted(Comparator.comparing(Docente::getFechaRegistro))
+			        .collect(Collectors.toList());
+			return ResponseEntity.ok().headers(headers).body(sortedDocentes);
+		}
+		headers.set("message", msg);
+		return ResponseEntity.badRequest().headers(headers).build();
 	}
 	// BUSCAR POR ID
 	@PreAuthorize("hasRole('ADMIN') or hasRole('DOC')")

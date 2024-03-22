@@ -3,6 +3,10 @@ package pe.colegio.entity;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -44,7 +48,6 @@ public class Horario implements Serializable{
 		this.horaFin = horaFin;
 		this.curso = curso;
 	}
-
 	public Integer getHorarioId() {
 		return horarioId;
 	}

@@ -9,7 +9,10 @@ import java.util.Set;
 import javax.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import pe.colegio.util.EstadoType;
@@ -48,16 +51,19 @@ public class Estudiante implements Serializable{
 	@Column
 	private String estado = EstadoType.ACTIVE.name();
 	
+	@JsonBackReference
 	@ManyToMany @JoinTable(name = "estudiantes_cursos", joinColumns = @JoinColumn(name="estudiante_id"),
 			   inverseJoinColumns = @JoinColumn(name="curso_id"))
 	private Set<Curso> itemsCurso = new HashSet<>();
 	
 	@OneToMany(mappedBy = "estudiante")
-	private Collection<Calificacion> calificaciones = new ArrayList<>();
-	
+	private Collection<Calificacion> calificaciones = new ArrayList<>();	
+
+	@JsonIgnore
 	@ManyToMany(mappedBy = "itemsEstudiante")
 	private Set<Asistencia> itemsAsistencia = new HashSet<>();
-	
+
+	@JsonIgnore
 	@ManyToMany(mappedBy = "itemsEstudiante")
 	private Set<Apoderado> itemsApoderado = new HashSet<>();
 

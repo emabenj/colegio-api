@@ -10,7 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 import com.fasterxml.jackson.annotation.*;
 
 @Entity @Table(name = "docentes")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "docenteId")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "docenteId")
 public class Docente implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
@@ -37,10 +37,11 @@ public class Docente implements Serializable{
 	
 	@Column @DateTimeFormat(pattern="yyyy-MM-dd",iso=ISO.DATE)
 	private LocalDate fechaRegistro;
-	
+
 	@ManyToOne @JoinColumn(name = "curso_id", nullable = false)
 	private Curso curso;
 
+	@JsonIgnore
 	@OneToOne @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 	

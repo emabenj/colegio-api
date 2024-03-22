@@ -55,17 +55,17 @@ public class ApoderadoController {
 			if (msg.isEmpty()) {
 				Set<Integer> estudiantesIds = apoderado.getItemsEstudiante().stream().map(Estudiante::getEstudianteId)
 						.collect(Collectors.toSet());
-				msg = estudiantesIds.isEmpty() ? "Faltó establecer un estudiante que sea hijo del apoderado." : "";
+				msg = estudiantesIds.isEmpty() ? "Falta establecer un estudiante que sea hijo del apoderado." : "";
 				List<Integer> estudiantesNoRegistrados = estudiantesIds.stream().filter(id -> !estudianteRep.existsById(id))
 						.collect(Collectors.toList());
 				
-				if ( msg.isEmpty() && !estudiantesNoRegistrados.isEmpty()) { msg = "Uno o más estudiantes no se encuentran registrados."; }
+				if (msg.isEmpty() && !estudiantesNoRegistrados.isEmpty()) { msg = "Uno o más estudiantes no se encuentran registrados."; }
 				if (msg.isEmpty()) { return new ResponseEntity<>(service.agregar(apoderado).getApoderadoId(), HttpStatus.CREATED); }
 			}
 		} catch (DataIntegrityViolationException e) {
-			msg = "Error al agregar el apoderado: El correo o el teléfono ya se encuentra registrado.";
+			msg = "El correo o el teléfono ya se encuentra registrado.";
 		} catch (Exception e) {
-			msg = "Error al agregar el apoderado: "+ e.toString();
+			msg = "Error al agregar: "+ e.toString();
 		}
 		headers.set("message", msg);
 		return ResponseEntity.badRequest().headers(headers).build();

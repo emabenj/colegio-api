@@ -2,7 +2,12 @@ package pe.colegio.controller;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +28,10 @@ public class HorarioController {
 			@RequestParam(value = "fecha") String fecha,
 			@RequestBody Collection<Integer> cursoIds){
 		Collection<Horario> horarios = service.listar(LocalDate.parse(fecha), cursoIds);
-		return ResponseEntity.ok(horarios);
+		List<Horario> sortedHorarios = horarios.stream()
+		        .sorted(Comparator.comparing(Horario::getHoraInicio))
+		        .collect(Collectors.toList());
+		return ResponseEntity.ok(sortedHorarios);
 	}
 	// BUSCAR POR ID
 	@PreAuthorize("hasRole('ADMIN') or hasRole('DOC')")
@@ -44,11 +52,20 @@ public class HorarioController {
 	@PreAuthorize("hasRole('ADMIN') or hasRole('DOC')")
 	@PutMapping
 	public ResponseEntity<?> actualizarHorario(@RequestBody Horario horario) {
-		if(service.buscarPorId(horario.getHorarioId()) != null) {
-			service.actualizar(horario);
-			return ResponseEntity.ok("Horario actualizado.");
-		}
-		return ResponseEntity.notFound().build();
+		HttpHeaders headers = new HttpHeaders();
+		String msg = "Horario actualizado.";
+		try {
+			if(service.buscarPorId(horario.getHorarioId()) != null) {
+				service.actualizar(horario);
+				headers.set("message", msg);
+				return ResponseEntity.ok().headers(headers).build();
+			}else {
+				msg = "El horario con ese id no existe.";
+			}
+		} catch (DataIntegrityViolationException e) { msg = "Se ingresó un valor duplicado."; } 
+		catch (Exception e) { msg = e.getMessage(); }
+		headers.set("message", msg);
+		return ResponseEntity.badRequest().headers(headers).build();
 	}
 	// ELIMINAR HORARIO
 	@PreAuthorize("hasRole('ADMIN') or hasRole('DOC')")
