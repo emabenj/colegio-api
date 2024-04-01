@@ -44,7 +44,7 @@ public class CalificacionController {
 		try {
 			if (cursoRep.findById(calificacion.getCurso().getCursoId()).orElse(null) == null) {
 				msg = "El curso no se encuentra registrado.";
-			} else if(service.buscarPorId(calificacion.getEstudiante().getEstudianteId()) == null) {
+			} else if(estudianteRep.findById(calificacion.getEstudiante().getEstudianteId()) == null) {
 				msg = "El estudiante no se encuentra registrado.";
 			} else {
 				service.actualizar(calificacion);

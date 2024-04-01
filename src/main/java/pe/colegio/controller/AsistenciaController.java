@@ -64,18 +64,23 @@ public class AsistenciaController {
 	// ACTUALIZAR ASISTENCIAS
 	@PreAuthorize("hasRole('ADMIN') or hasRole('APOD') or hasRole('DOC')")
 	@PutMapping
-	public ResponseEntity<Collection<Asistencia>> actualizarAsistencias(@RequestBody Collection<Asistencia> asistencias){
+	public ResponseEntity<Collection<String>> actualizarAsistencias(@RequestBody Collection<Asistencia> asistencias){
 		HttpHeaders headers = new HttpHeaders();
 		String msg = "No se ha actualizado ninguna noticia.";
-		Collection<Asistencia> asistenciasActualizadas = service.actualizarAsistencias(asistencias);
-		if(asistenciasActualizadas.size() == 0) {
-			return ResponseEntity.badRequest().headers(headers).build();
-		}else if(asistenciasActualizadas.size() != asistencias.size()) {
-			Integer total = asistencias.size() - asistenciasActualizadas.size();
-			msg = "Hubieron " + total.toString() + " asistencias de alumnos que no se actualizaron.";			
-		}else { msg = "Asistencias actualizadas."; }
+		Collection<String> emailsApoderados = service.actualizarAsistencias(asistencias);
+		if(emailsApoderados.size() == 0) {
+			msg = "No hay asistencias para actualizar";
+			headers.set("message", msg);
+		}else if(emailsApoderados.size() != asistencias.size()) {
+			Integer total = asistencias.size() - emailsApoderados.size();
+			msg = "Las asistencias de " + total.toString() + " alumnos no se actualizaron correctamente.";			
+		}else { 
+			msg = "Asistencias actualizadas.";
+			headers.set("message", msg);
+			return ResponseEntity.ok().headers(headers).body(emailsApoderados);
+			}
 		headers.set("message", msg);
-		return ResponseEntity.ok().headers(headers).body(asistenciasActualizadas);
+		return ResponseEntity.badRequest().headers(headers).build();
 	}
 	//AGREGAR - EDITAR
 //	@GetMapping("/estudiante/{id}/{sem}")

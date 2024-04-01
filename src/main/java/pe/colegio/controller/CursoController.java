@@ -1,6 +1,8 @@
 package pe.colegio.controller;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,7 +20,7 @@ public class CursoController {
 	// LISTAR
 	@PreAuthorize("hasRole('ADMIN') or hasRole('DOC') or hasRole('APOD')")
 	@GetMapping
-	public ResponseEntity<Collection<Curso>> listarCursos(
+	public ResponseEntity<Collection<?>> listarCursos(			
 			@RequestParam(required = false, value = "estudiante") Integer estudianteId,
 			@RequestParam(required = false, value = "nivel") String nivelEducativo){
 		Collection<Curso> cursos = service.listar(estudianteId, nivelEducativo);

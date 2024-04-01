@@ -14,6 +14,6 @@ public interface AsistenciaServ {
 //	public abstract Collection<Asistencia> listaByFI(LocalDate fi);
 //	public abstract void agregar(Asistencia asistencia);
 //	public abstract void actualizar(Asistencia asistencia);
-	public abstract Collection<Asistencia> actualizarAsistencias(Collection<Asistencia> asistencias);
+	public abstract Collection<String> actualizarAsistencias(Collection<Asistencia> asistencias);
 //	public abstract void eliminar(Integer id);
 }

@@ -50,8 +50,8 @@ public class Estudiante implements Serializable{
 
 	@Column
 	private String estado = EstadoType.ACTIVE.name();
-	
-	@JsonBackReference
+
+	@JsonIgnore
 	@ManyToMany @JoinTable(name = "estudiantes_cursos", joinColumns = @JoinColumn(name="estudiante_id"),
 			   inverseJoinColumns = @JoinColumn(name="curso_id"))
 	private Set<Curso> itemsCurso = new HashSet<>();

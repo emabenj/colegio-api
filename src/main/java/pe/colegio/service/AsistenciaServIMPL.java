@@ -15,6 +15,8 @@ import pe.colegio.entity.Asistencia;
 import pe.colegio.entity.Estudiante;
 import pe.colegio.repository.AsistenciaRep;
 import pe.colegio.repository.EstudianteRep;
+import pe.colegio.util.EstadoType;
+import pe.colegio.util.RoleType;
 
 @Service
 public class AsistenciaServIMPL implements AsistenciaServ{
@@ -74,16 +76,20 @@ public class AsistenciaServIMPL implements AsistenciaServ{
 //	}
 	// ACTUALIZAR CONJUNTO DE ASISTENCIAS
 	@Override @Transactional
-	public Collection<Asistencia> actualizarAsistencias(Collection<Asistencia> asistencias) {
-		Collection<Asistencia> asistenciasEvaluadas = new ArrayList();
+	public Collection<String> actualizarAsistencias(Collection<Asistencia> asistencias) {
+		Collection<String> emailsApoderados = new ArrayList();
 		for (Asistencia as: asistencias) {
 			Asistencia asistencia = buscarPorId(as.getAsistenciaId());
 			if(asistencia != null) {
 				asistencia.setEstado(as.getEstado());
-				asistenciasEvaluadas.add(repository.save(asistencia));				
+				repository.save(asistencia);
+				if(as.getEstado().equals(EstadoType.F.name())) {
+					 emailsApoderados.addAll(asistencia.getItemsEstudiante().stream().collect(Collectors.toList()).get(0).getItemsApoderado().stream()
+					 .map(a -> a.getCorreo()).collect(Collectors.toList()));
+				}				
 			}
 		}
-		return asistenciasEvaluadas;
+		return emailsApoderados;
 		
 	}
 //

@@ -43,7 +43,6 @@ public class NoticiaServIMPL implements NoticiaServ {
 	@Override @Transactional
 	public Noticia agregar(Noticia noticia) {
 		noticia.setNoticiaId(null);
-		noticia.setFechaPublicacion(LocalDate.now());
 		noticia.setAdministrador(adminRep.findById(noticia.getAdministrador().getAdministradorId()).orElse(null));
 		return repository.save(noticia);
 	}

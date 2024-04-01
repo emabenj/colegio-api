@@ -1,7 +1,9 @@
 package pe.colegio.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -48,6 +50,10 @@ public class Usuario implements Serializable{
 	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(name="usuarios_roles", joinColumns=@JoinColumn(name="usuario_id"), inverseJoinColumns=@JoinColumn(name="role_id"))
 	private Set<Rol_Usuario> itemsRole = new HashSet<>();
+	
+	@ManyToMany(fetch=FetchType.EAGER)
+	@JoinTable(name="usuarios_notificaciones", joinColumns=@JoinColumn(name="usuario_id"), inverseJoinColumns=@JoinColumn(name="notificacion_id"))
+	private List<Notificacion> notificaciones = new ArrayList();
 	
 	public Boolean tieneRol(String rol) {
 		Boolean evaluacion = false;
@@ -174,5 +180,13 @@ public class Usuario implements Serializable{
 
 	public void setAdministrador(Administrador administrador) {
 		this.administrador = administrador;
-	}	
+	}
+
+	public List<Notificacion> getNotificaciones() {
+		return notificaciones;
+	}
+
+	public void setNotificaciones(List<Notificacion> notificaciones) {
+		this.notificaciones = notificaciones;
+	}
 }

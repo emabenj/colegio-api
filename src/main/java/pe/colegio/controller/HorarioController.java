@@ -31,6 +31,8 @@ public class HorarioController {
 		List<Horario> sortedHorarios = horarios.stream()
 		        .sorted(Comparator.comparing(Horario::getHoraInicio))
 		        .collect(Collectors.toList());
+		System.out.println("OK:" + sortedHorarios.size());
+		
 		return ResponseEntity.ok(sortedHorarios);
 	}
 	// BUSCAR POR ID

@@ -15,6 +15,8 @@ public class EstudianteController {
 	private EstudianteServ service;
 	@Autowired
 	private CursoServ cursoService;
+	@Autowired
+	private DocenteServ docenteService;
 	
 	// LISTAR
 	@PreAuthorize("hasRole('ADMIN') or hasRole('APOD') or hasRole('DOC')")
@@ -33,6 +35,21 @@ public class EstudianteController {
 		estudiantes = service.listar(cursoId, nivel, grado, seccion);
 		headers.set("message", String.valueOf(estudiantes.size()));
 		return ResponseEntity.ok().headers(headers).body(estudiantes);
+	}
+	// LISTAR
+	@PreAuthorize("hasRole('DOC')")
+	@GetMapping("/aulas")
+	public ResponseEntity<Collection<Aula>> listarAulas(@RequestParam(required = false, value = "docente") Integer docenteId){
+		Collection<Aula> aulas = new ArrayList<>();
+		HttpHeaders headers = new HttpHeaders();
+		if (docenteId != null && docenteService.buscarPorId(docenteId) == null) {
+			headers.set("message", "Docente no encontrado.");
+			return ResponseEntity.badRequest().headers(headers).build();
+		}
+		Integer cursoId = docenteService.buscarPorId(docenteId).getCurso().getCursoId();
+		aulas = service.obtenerAulas(cursoId);
+		headers.set("message", String.valueOf(aulas.size()));
+		return ResponseEntity.ok().headers(headers).body(aulas);
 	}
 	// BUSCAR POR ID
 	@GetMapping("/{id}")

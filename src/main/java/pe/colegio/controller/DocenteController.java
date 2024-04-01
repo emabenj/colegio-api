@@ -10,6 +10,7 @@ import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.colegio.entity.*;
+import pe.colegio.repository.ApoderadoRep;
 import pe.colegio.repository.CursoRep;
 import pe.colegio.repository.EstudianteRep;
 import pe.colegio.repository.UsuarioRep;
@@ -25,6 +26,8 @@ public class DocenteController {
 	private CursoRep cursoRep;
 	@Autowired
 	private EstudianteRep estudianteRep;
+	@Autowired
+	private ApoderadoRep apoderadoRep;
 	
 	public DocenteController() {}
 
@@ -38,9 +41,9 @@ public class DocenteController {
 		Collection<Docente> docentes = new ArrayList<>();
 		String msg = "Docentes encontrados";
 		if (cursoId != null && cursoRep.findById(cursoId) == null) {
-			msg = "Curso no encontrado";
+			msg = "Curso no encontrado.";
 		}else if(estudianteId != null && estudianteRep.findById(estudianteId) == null) {
-			msg = "Estudiante no encontrado";
+			msg = "Estudiante no encontrado.";
 		}else {
 			docentes = service.listar(cursoId, estudianteId);
 			if (docentes.size()==0) {

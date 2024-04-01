@@ -4,6 +4,7 @@ D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\service\HorarioServIMPL.
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\security\JwtAuthenticationEntryPoint.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\util\Prueba.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\repository\AdministradorRep.java
+D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\repository\NotificacionRep.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\entity\Calificacion.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\repository\EstudianteRep.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\controller\CursoController.java
@@ -16,6 +17,7 @@ D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\service\EstudianteServIM
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\entity\Curso.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\controller\AuthController.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\service\EstudianteServ.java
+D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\entity\Aula.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\repository\DocenteRep.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\repository\CursoRep.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\controller\NoticiaController.java
@@ -31,6 +33,7 @@ D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\controller\MensajeContro
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\entity\Administrador.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\service\Rol_UsuarioServ.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\service\DocenteServ.java
+D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\service\NotificacionServ.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\util\RoleType.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\security\JwtAuthenticationFilter.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\service\CursoServ.java
@@ -38,6 +41,7 @@ D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\controller\ApoderadoCont
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\entity\Evento.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\controller\EstudianteController.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\entity\Horario.java
+D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\controller\NotificacionController.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\entity\Asistencia.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\entity\Tarea.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\repository\CalificacionRep.java
@@ -67,12 +71,14 @@ D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\service\ApoderadoServIMP
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\service\NoticiaServ.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\security\JwtAuthResponse.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\security\JwtTokenProvider.java
+D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\entity\Notificacion.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\service\NoticiaServIMPL.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\repository\HorarioRep.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\repository\MensajeRep.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\util\FiltroCD.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\repository\ApoderadoRep.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\service\UsuarioServIMPL.java
+D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\service\NotificacionServIMPL.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\service\TareaServ.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\service\MensajeServIMPL.java
 D:\Proyectos\Java\REST_Colegio\src\main\java\pe\colegio\controller\TareaController.java
